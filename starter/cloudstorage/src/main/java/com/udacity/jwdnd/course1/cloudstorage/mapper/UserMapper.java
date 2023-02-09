@@ -3,6 +3,8 @@ package com.udacity.jwdnd.course1.cloudstorage.mapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
     @Insert("INSERT INTO " +
@@ -16,4 +18,8 @@ public interface UserMapper {
 
     @Delete("DELETE FROM USERS WHERE userid = #{userId}")
     boolean deleteUser(Integer userId);
+
+    @Select("SELECT * FROM USERS")
+    List<User> getAllUser();
+
 }
