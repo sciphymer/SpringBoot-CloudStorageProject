@@ -13,7 +13,7 @@
             <div class="alert fill-parent" th:classappend="${status == 'success' ? 'alert-success' : 'alert-danger'}">
                 <h1 th:if="${status == 'success'}" class="display-5" id="success">Success</h1>
                 <h1 th:unless="${status == 'success'}" class="display-5" id="fail">Error</h1>
-                <span th:text="${msg}"></span> <span> Click <a href="/home">here</a> to continue.</span>
+                <span th:text="${msg}"></span> <span> Click <a th:href="@{'/home?navType=' +${navType}}">here</a> to continue.</span>
             </div>
         </div>
     </body>

@@ -43,10 +43,11 @@ public class FileController {
                 fileService.save(fileUpload, auth);
                 model.addAttribute("msg", "Your file was uploaded. ");
                 model.addAttribute("status", "success");
-                return "result";
             } catch (IOException e) {
                 System.out.println("IOException: " + e.getMessage() + " " + e.getCause());
                 model.addAttribute("status", "error");
+            } finally{
+                model.addAttribute("navType","file");
                 return "result";
             }
         } else {
@@ -69,6 +70,7 @@ public class FileController {
             model.addAttribute("status", "error");
             model.addAttribute("msg", "There is some problem, file cannot be found.");
         }
+        model.addAttribute("navType","file");
         return "result";
     }
 
