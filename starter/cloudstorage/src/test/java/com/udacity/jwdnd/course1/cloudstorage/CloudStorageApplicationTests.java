@@ -2,13 +2,11 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -41,8 +39,64 @@ class CloudStorageApplicationTests {
 	@Test
 	public void getLoginPage() {
 		driver.get("http://localhost:" + this.port + "/login");
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		webDriverWait.until(ExpectedConditions.titleContains("Login"));
 		Assertions.assertEquals("Login", driver.getTitle());
 	}
+
+	@Test
+	@DisplayName("unauthorized User Only Access Login And Signup Pages")
+	public void unauthorizedUserAccess(){
+		getLoginPage();
+
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		driver.get("http://localhost:" + this.port + "/signup");
+		webDriverWait.until(ExpectedConditions.titleContains("Sign Up"));
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/home");
+		webDriverWait.until(ExpectedConditions.titleContains("Login"));
+		Assertions.assertEquals("Login", driver.getTitle());
+	}
+
+	@Test
+	@DisplayName("A test that signs up a new user, logs in, verifies that the home page " +
+			"is accessible, logs out, and verifies that the home page is no longer accessible")
+	public void basicLoginLogout(){
+		SignupPage signupPage = new SignupPage(driver);
+		LoginPage loginPage = new LoginPage(driver);
+		HomePage homePage = new HomePage(driver);
+
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		driver.get("http://localhost:" + this.port + "/signup");
+		webDriverWait.until(ExpectedConditions.titleContains("Sign Up"));
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+		String firstName = "Harry";
+		String lastName = "Potter";
+		String username = "harrypotter";
+		String password = "magicWorld";
+
+		signupPage.signup(firstName,lastName,username,password);
+
+		driver.get("http://localhost:" + this.port + "/login");
+		loginPage.login(username,password);
+		webDriverWait.until(ExpectedConditions.urlContains("/home"));
+		Assertions.assertEquals("http://localhost:" + this.port + "/home", driver.getCurrentUrl());
+
+		homePage.logout();
+		webDriverWait.until(ExpectedConditions.urlContains("/login"));
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get("http://localhost:" + this.port + "/home");
+		try {
+			webDriverWait.until(ExpectedConditions.urlContains("/home"));
+		} catch (TimeoutException e) {
+		} finally {
+			Assertions.assertNotEquals("http://localhost:" + this.port + "/home", driver.getCurrentUrl());
+		}
+
+	}
+
 
 	/**
 	 * PLEASE DO NOT DELETE THIS method.
