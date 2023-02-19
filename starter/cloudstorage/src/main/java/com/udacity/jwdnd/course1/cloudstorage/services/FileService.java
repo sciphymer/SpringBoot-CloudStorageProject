@@ -24,6 +24,7 @@ public class FileService {
 
     public Integer save(MultipartFile fileData, Authentication auth) throws IOException{
         User user = userMapper.getUser((String)auth.getPrincipal());
+
         try {
             File file = new File(
                     null,

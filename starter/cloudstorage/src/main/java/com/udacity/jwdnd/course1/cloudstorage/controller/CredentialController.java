@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class CredentialController {
     @Autowired
     CredentialService credentialService;
+    @Autowired
+    EncryptionService encryptionService;
+
     @GetMapping("/delete/{credentialId}")
     public String deleteCredential(@PathVariable Integer credentialId, Model model, Authentication auth){
         boolean isDeleted = credentialService.deleteCredential(credentialId, auth);
@@ -52,5 +56,12 @@ public class CredentialController {
         }
         model.addAttribute("navType","credential");
         return "result";
+    }
+
+    @PostMapping("/decrypt")
+    public String decryptPassword(@RequestParam Integer credentialId, Authentication auth){
+        Credential credential = credentialService.getCredentialById(credentialId,auth);
+        String decryptedPassword = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+        return decryptedPassword;
     }
 }

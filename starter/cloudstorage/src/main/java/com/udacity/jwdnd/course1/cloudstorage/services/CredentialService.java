@@ -34,13 +34,13 @@ public class CredentialService {
 
     public Integer addCredential(Credential credential, Authentication auth){
         User user = userService.getUser((String)auth.getPrincipal());
-        Credential credentialInDB = credentialMapper.getCredentialByURLAndUsername(credential);
+        Credential credentialInDB = credentialMapper.getCredentialByIdAndUsername(credential);
         if(credentialInDB != null){
             return -1;
         } else {
             credential.setUserId(user.getUserId());
-            credential = encryptingCredential(credential);
-            return credentialMapper.addCredential(credential);
+            Credential encrptedCredential = encryptingCredential(credential);
+            return credentialMapper.addCredential(encrptedCredential);
         }
     }
 
@@ -55,14 +55,15 @@ public class CredentialService {
         return credentialMapper.getCredentialById(credential.getCredentialId())!=null;
     }
 
-    public List<Credential> getDecryptedCredentialList(Authentication auth){
+    public List<Credential> getCredentialList(Authentication auth){
         User user = userService.getUser((String)auth.getPrincipal());
-        List<Credential> credentials = credentialMapper.getCredentialList(user);
-        List<Credential> decryptedCredentials = new ArrayList<>();
-        for(Credential credential:credentials){
-            decryptedCredentials.add(decryptingCredential((credential)));
-        }
-        return decryptedCredentials;
+        return credentialMapper.getCredentialList(user);
+    }
+
+    public Credential getCredentialById(Integer credentialId, Authentication auth){
+        User user = userService.getUser((String)auth.getPrincipal());
+        Credential cred = new Credential(credentialId,null,null,null,null,user.getUserId());
+        return credentialMapper.getCredentialByIdAndUsername(cred);
     }
 
     private static Credential encryptingCredential(Credential credential){

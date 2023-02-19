@@ -21,7 +21,7 @@ public interface CredentialMapper {
     boolean deleteCredential(Integer credentialId, Integer userId);
 
     @Update("UPDATE CREDENTIALS SET " +
-            "url = #{noteTitle}, " +
+            "url = #{url}, " +
             "username = #{userName}, " +
             "key = #{key}, " +
             "password = #{password} " +
@@ -29,6 +29,6 @@ public interface CredentialMapper {
     Integer editCredential(Credential credential);
     @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId}")
     Credential getCredentialById(Integer credentialId);
-    @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{url} AND username = #{userName}")
-    Credential getCredentialByURLAndUsername(Credential credential);
+    @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId} AND username = #{userName}")
+    Credential getCredentialByIdAndUsername(Credential credential);
 }

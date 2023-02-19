@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import java.io.File;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -45,7 +46,7 @@ class CloudStorageApplicationTests {
 	}
 
 	@Test
-	@DisplayName("unauthorized User Only Access Login And Signup Pages")
+	@DisplayName("unauthorized User can only access login And signup pages")
 	public void unauthorizedUserAccess(){
 		getLoginPage();
 
@@ -97,6 +98,152 @@ class CloudStorageApplicationTests {
 
 	}
 
+	@Test
+	@DisplayName("Test for Note Creation, Viewing, Editing, and Deletion.")
+	public void createAndDisplayNote(){
+		NotePage notepage = new NotePage(driver);
+		SignupPage signupPage = new SignupPage(driver);
+		LoginPage loginPage = new LoginPage(driver);
+		ResultPage resultPage = new ResultPage(driver);
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+
+		driver.get("http://localhost:" + this.port + "/signup");
+		String firstName = "Ron";
+		String lastName = "Weasley";
+		String username = "ron";
+		String password = "wizardFamily";
+		signupPage.signup(firstName,lastName,username,password);
+
+		driver.get("http://localhost:" + this.port + "/login");
+		loginPage.login(username,password);
+		webDriverWait.until(ExpectedConditions.urlContains("/home"));
+
+		String noteTitle = "Magic Spell";
+		String noteDescription = "Wingardium Leviosa.";
+
+		WebElement navNoteTab = webDriverWait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#nav-notes-tab")));
+		navNoteTab.click();
+
+		WebElement newNoteButton =  webDriverWait.until(driver -> driver.findElement(By.xpath("//button[text()='+ Add a New Note']")));
+		newNoteButton.click();
+		notepage.saveNewNote(noteTitle, noteDescription);
+
+		webDriverWait.until(ExpectedConditions.titleContains("Result"));
+		resultPage.clickContinue();
+
+		WebElement navNotesTab =  webDriverWait.until(ExpectedConditions.visibilityOf(
+				driver.findElement(By.cssSelector("#nav-notes-tab"))));
+		navNotesTab.click();
+		WebElement editBtn = notepage.getNoteEditBtnByNoteDescription(noteTitle,noteDescription);
+		editBtn.click();
+		String existingTitle = notepage.getNoteTitleInput();
+		String editedDescription = "Expecto patronum!";
+		notepage.saveNewNote(existingTitle,editedDescription);
+		webDriverWait.until(ExpectedConditions.titleContains("Result"));
+		resultPage.clickContinue();
+		Assertions.assertTrue(checkIfNoteExisted(driver, existingTitle,editedDescription));
+		try {
+			WebElement deleteBtn = notepage.getNoteDeleteBtnByNoteDescription(noteTitle, editedDescription);
+			deleteBtn.click();
+			webDriverWait.until(ExpectedConditions.titleContains("Result"));
+			resultPage.clickContinue();
+			Assertions.assertFalse(checkIfNoteExisted(driver, existingTitle, editedDescription));
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			Assertions.fail();
+		}
+	}
+
+	private static boolean checkIfNoteExisted(WebDriver driver, String title, String description){
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		try{
+		webDriverWait.until(ExpectedConditions
+				.visibilityOf(driver.findElement(By.xpath("//*[@id='userTable'']/tbody/tr/th[text()="
+						+ title+"]/following-siblings::td[text()="+description+"])"))));
+			return true;
+		} catch(TimeoutException e){
+			return false;
+		}
+	}
+
+
+	@Test
+	@DisplayName("Tests for Credential Creation, Viewing, Editing, and Deletion.")
+	public void testCredential() {
+		CredentialPage credentialPage = new CredentialPage(driver);
+		SignupPage signupPage = new SignupPage(driver);
+		LoginPage loginPage = new LoginPage(driver);
+		ResultPage resultPage = new ResultPage(driver);
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+
+		driver.get("http://localhost:" + this.port + "/signup");
+		String firstName = "Ron";
+		String lastName = "Weasley";
+		String username = "ron";
+		String password = "wizardFamily";
+
+		String url = "moodle.com";
+		String url_username = "harrypotter";
+		String url_password = "sirusblack";
+
+		signupPage.signup(firstName,lastName,username,password);
+
+		driver.get("http://localhost:" + this.port + "/login");
+		loginPage.login(username,password);
+		webDriverWait.until(ExpectedConditions.urlContains("/home"));
+
+		WebElement navNoteTab = webDriverWait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#nav-credentials-tab")));
+		navNoteTab.click();
+
+		credentialPage.saveNewCredential(url,url_username,url_password);
+
+		webDriverWait.until(ExpectedConditions.titleContains("Result"));
+		resultPage.clickContinue();
+
+		WebElement naveCredentialTab =  webDriverWait.until(ExpectedConditions.visibilityOf(
+				driver.findElement(By.cssSelector("#nav-credentials-tab"))));
+		naveCredentialTab.click();
+
+		//verify the created credential record//
+
+		WebElement editBtn = credentialPage.getEditBtnByURL(url);
+		editBtn.click();
+		String existingUrl = credentialPage.getUrlInputByURL();
+		String existingUsername = credentialPage.getUsernameInputByURL();
+		String existingPassword = credentialPage.getPasswordInputByURL();
+		String editedURLUsername = "jamespotter";
+		String editedURLPassword = "lilypotter";
+
+		credentialPage.saveNewCredential(existingUrl,editedURLUsername,editedURLPassword);
+
+		webDriverWait.until(ExpectedConditions.titleContains("Result"));
+		resultPage.clickContinue();
+
+		Assertions.assertTrue(checkIfCredentialExisted(driver, existingUrl, editedURLUsername, editedURLPassword ));
+		try {
+			WebElement deleteBtn = credentialPage.getDeleteBtnByURL(existingUrl);
+			deleteBtn.click();
+			webDriverWait.until(ExpectedConditions.titleContains("Result"));
+			resultPage.clickContinue();
+			Assertions.assertFalse(checkIfCredentialExisted(driver, existingUrl, editedURLUsername, editedURLPassword ));
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			Assertions.fail();
+		}
+	}
+
+	private static boolean checkIfCredentialExisted(WebDriver driver, String url, String urlUsername, String urlPassword){
+		WebDriverWait webDriverWait = new WebDriverWait(driver, 2);
+		try {
+			WebElement credentialRecord = webDriverWait.until(ExpectedConditions
+					.visibilityOf(driver.findElement(By.xpath("//*[@id='credentialTable']/tbody/tr/th[text()=" +
+							url + "]/following-sibling::td[text()=" + urlUsername + "]/following-sibling::td[text()=" + urlPassword + "]"))));
+			return true;
+		} catch(TimeoutException e){
+			System.out.println(e.getMessage());
+			return false;
+		}
+	}
 
 	/**
 	 * PLEASE DO NOT DELETE THIS method.

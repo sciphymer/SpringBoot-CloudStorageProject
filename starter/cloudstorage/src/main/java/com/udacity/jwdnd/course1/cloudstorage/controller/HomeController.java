@@ -4,10 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,6 +26,9 @@ public class HomeController {
     NoteService noteService;
     @Autowired
     CredentialService credentialService;
+    @Autowired
+    EncryptionService encryptionService;
+
 
     @GetMapping
     public String homeView(@RequestParam(defaultValue="file") String navType,
@@ -37,11 +37,12 @@ public class HomeController {
                            RedirectAttributes redirectAttributes){
         List<File> fileList = fileService.getFileList(auth);
         List<Note> noteList = noteService.getNotes(auth);
-        List<Credential> credentialList = credentialService.getDecryptedCredentialList(auth);
+        List<Credential> credentialList = credentialService.getCredentialList(auth);
         model.addAttribute("fileList", fileList);
         model.addAttribute("notes", noteList);
         model.addAttribute("credentials", credentialList);
         model.addAttribute("navType",navType);
+        model.addAttribute("encryptionService",encryptionService);
         Map<String, ?> attributes = redirectAttributes.getFlashAttributes();
         return "home";
     }

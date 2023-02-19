@@ -61,10 +61,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" th:classappend="${navType=='note'}?'show active'" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
-                            + Add a New Note
-                        </button>
-
+                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">+ Add a New Note</button>
                         <div class="table-responsive">
                             <table class="table table-striped" id="userTable">
                                 <thead>
@@ -122,9 +119,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" th:classappend="${navType=='credential'}?'show active'" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
-                            + Add a New Credential
-                        </button>
+                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">+ Add a New Credential</button>
 
                         <div class="table-responsive">
                             <table class="table table-striped" th:object="${credentials}" id="credentialTable">
@@ -210,7 +205,19 @@
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
-                $('#credential-password').val(password ? password : '');
+                $('#credential-password').val(password ?
+                $.ajax({
+                    url: '/home/credential/decryptPassword',
+                    data:{ id:credentialId},
+                    type:'GET',
+                    dataType: 'json',
+                   })
+                   .done(function(json){
+                   return(json.decryptedPassword);
+                   })
+                })
+                : '');
+
                 $('#credentialModal').modal('show');
             }
         </script>
