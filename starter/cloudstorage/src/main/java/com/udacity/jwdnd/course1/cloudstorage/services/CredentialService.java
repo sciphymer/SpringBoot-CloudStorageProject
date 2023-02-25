@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -78,7 +79,7 @@ public class CredentialService {
         return credential;
     }
 
-    private static Credential decryptingCredential(Credential credential){
+    private static Credential decryptingCredential(Credential credential) throws UnsupportedEncodingException {
         EncryptionService enService = new EncryptionService();
         String decryptedPassword = enService.decryptValue(credential.getPassword(), credential.getKey());
         credential.setPassword(decryptedPassword);

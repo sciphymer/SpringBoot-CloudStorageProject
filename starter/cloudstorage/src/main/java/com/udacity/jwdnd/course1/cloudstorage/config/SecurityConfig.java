@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
                 .and().headers().frameOptions().sameOrigin()
-                .and().csrf().ignoringAntMatchers("/h2-console/**");
+                .and().csrf().ignoringAntMatchers("/h2-console/**","/home/credential/decryptPassword");
 
         http.formLogin()
                 .loginPage("/login")

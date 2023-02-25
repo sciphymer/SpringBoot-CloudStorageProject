@@ -186,7 +186,7 @@
             </div>
         </div>
 
-        <script th:src="@{/js/jquery-slim.min.js}"></script>
+        <script th:src="@{/js/jquery-3.x-git.min.js}"></script>
         <script th:src="@{/js/popper.min.js}"></script>
         <script th:src="@{/js/bootstrap.min.js}"></script>
 
@@ -206,18 +206,22 @@
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ?
-                $.ajax({
+                ($.ajax({
                     url: '/home/credential/decryptPassword',
-                    data:{ id:credentialId},
-                    type:'GET',
-                    dataType: 'json',
-                   })
-                   .done(function(json){
-                   return(json.decryptedPassword);
-                   })
+                    data:{id:credentialId},
+                    type:'POST',
+                    dataType: 'text',
+                    contentType: 'application/x-www-form-urlencoded'
                 })
+                .done(function(data){
+                    $('#credential-password').val(data);
+                    console.log(data);
+                })
+                .fail(function(){
+                    alert("fail to retrieve password.");
+                    $('#credential-password').val('');
+                }))
                 : '');
-
                 $('#credentialModal').modal('show');
             }
         </script>

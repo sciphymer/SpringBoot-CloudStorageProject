@@ -4,10 +4,14 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
 
 @RequestMapping("/home/credential")
 @Controller
@@ -58,10 +62,16 @@ public class CredentialController {
         return "result";
     }
 
-    @PostMapping("/decrypt")
-    public String decryptPassword(@RequestParam Integer credentialId, Authentication auth){
+    @PostMapping("/decryptPassword")
+    public @ResponseBody String decryptPassword(@RequestParam(name="id") Integer credentialId, Authentication auth) throws UnsupportedEncodingException {
         Credential credential = credentialService.getCredentialById(credentialId,auth);
-        String decryptedPassword = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
-        return decryptedPassword;
+        String decryptedPassword = "";
+        try {
+            decryptedPassword = encryptionService.decryptValue(credential.getPassword(), credential.getKey());
+        } catch (UnsupportedEncodingException e){
+
+        } finally {
+            return decryptedPassword;
+        }
     }
 }

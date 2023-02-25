@@ -29,6 +29,6 @@ public interface CredentialMapper {
     Integer editCredential(Credential credential);
     @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId}")
     Credential getCredentialById(Integer credentialId);
-    @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId} AND username = #{userName}")
+    @Select("SELECT * FROM CREDENTIALS WHERE credentialid = #{credentialId} AND userid = #{userId}")
     Credential getCredentialByIdAndUsername(Credential credential);
 }

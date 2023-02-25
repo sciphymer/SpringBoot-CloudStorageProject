@@ -32,7 +32,7 @@ public class EncryptionService {
         return Base64.getEncoder().encodeToString(encryptedValue);
     }
 
-    public String decryptValue(String data, String key) {
+    public String decryptValue(String data, String key) throws UnsupportedEncodingException {
         byte[] decryptedValue = null;
 
         try {
@@ -45,6 +45,6 @@ public class EncryptionService {
             logger.error(e.getMessage());
         }
 
-        return new String(decryptedValue);
+        return new String(decryptedValue,"UTF-8");
     }
 }
