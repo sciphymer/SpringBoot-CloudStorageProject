@@ -45,5 +45,15 @@
                 <button type="submit" class="btn btn-primary" id="buttonSignUp">Sign Up</button>
             </form>
         </div>
+        <script  th:inline="javascript">
+            var element = document.getElementById("success-msg");
+            if(element != null){
+                setTimeout(redirectToLoginPage,2000);
+            }
+            function redirectToLoginPage(){
+                window.location.replace(window.location.origin + "/login");
+            }
+        </script>
     </body>
+
 </html>

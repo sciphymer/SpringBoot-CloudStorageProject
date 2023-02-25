@@ -40,9 +40,15 @@ public class FileController {
 
         if(!fileUpload.isEmpty()) {
             try {
-                fileService.save(fileUpload, auth);
-                model.addAttribute("msg", "Your file was uploaded. ");
-                model.addAttribute("status", "success");
+                File file = fileService.getFileByUserIdAndFileName(auth,fileUpload.getOriginalFilename());
+                if(file==null) {
+                    fileService.save(fileUpload, auth);
+                    model.addAttribute("msg", "Your file was uploaded. ");
+                    model.addAttribute("status", "success");
+                } else{
+                    model.addAttribute("msg", "Duplicate filenames. Please upload another file or rename the file.");
+                    model.addAttribute("status", "error");
+                }
             } catch (IOException e) {
                 System.out.println("IOException: " + e.getMessage() + " " + e.getCause());
                 model.addAttribute("status", "error");

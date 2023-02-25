@@ -56,10 +56,10 @@ public class FileService {
         return successDeleted;
     }
 
-//    public File getFileByUserIdAndFileName(Authentication auth, String fileName){
-//        User user = userMapper.getUser((String)auth.getPrincipal());
-//        return fileMapper.getFileByUserIdAndFileName(user.getUserId(),fileName);
-//    }
+    public File getFileByUserIdAndFileName(Authentication auth, String fileName){
+        User user = userMapper.getUser((String)auth.getPrincipal());
+        return fileMapper.getFileByUserIdAndFileName(user.getUserId(),fileName);
+    }
 
 //    public Boolean deleteFileById (Integer fileId){
 //        return fileMapper.deleteFileByFileId(fileId);

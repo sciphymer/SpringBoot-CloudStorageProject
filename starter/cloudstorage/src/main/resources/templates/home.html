@@ -10,10 +10,14 @@
     </head>
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container">
-            <div id="logoutDiv">
-                <form action="#" th:action="@{/logout}" method="POST">
-                    <button type="submit" class="btn btn-secondary float-right">Logout</button>
-                </form>
+            <div class="navbar navbar-light bg-light">
+                <div th:text="|Welcome, ${userFirstName}!|"></div>
+
+                <div id="logoutDiv">
+                    <form action="#" th:action="@{/logout}" method="POST">
+                        <button type="submit" class="btn btn-secondary float-right">Logout</button>
+                    </form>
+                </div>
             </div>
             <div id="contentDiv" style="clear: right;">
                 <nav style="clear: right;">
@@ -32,7 +36,7 @@
                                         <label for="fileUpload">Upload a New File:</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="file" class="form-control-file" id="fileUpload" th:name="fileUpload">
+                                        <input type="file"  class="form-control-file" id="fileUpload" th:name="fileUpload">
                                     </div>
                                     <div class="col-sm-4">
                                         <button type="submit" class="btn btn-dark" id="uploadButton">Upload</button>
