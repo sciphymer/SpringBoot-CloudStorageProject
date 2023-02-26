@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
@@ -38,11 +39,13 @@ public class HomeController {
         List<File> fileList = fileService.getFileList(auth);
         List<Note> noteList = noteService.getNotes(auth);
         List<Credential> credentialList = credentialService.getCredentialList(auth);
+        User user = userService.getUser((String)auth.getPrincipal());
         model.addAttribute("fileList", fileList);
         model.addAttribute("notes", noteList);
         model.addAttribute("credentials", credentialList);
         model.addAttribute("navType",navType);
         model.addAttribute("encryptionService",encryptionService);
+        model.addAttribute("userFirstName",user.getFirstName());
         Map<String, ?> attributes = redirectAttributes.getFlashAttributes();
         return "home";
     }
