@@ -48,7 +48,7 @@
         <script  th:inline="javascript">
             var element = document.getElementById("success-msg");
             if(element != null){
-                setTimeout(redirectToLoginPage,2000);
+                setTimeout(redirectToLoginPage,1000);
             }
             function redirectToLoginPage(){
                 window.location.replace(window.location.origin + "/login");

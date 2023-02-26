@@ -23,6 +23,7 @@ public class NoteService {
 
     public Integer editNote(Note note, Authentication auth){
         User user = userService.getUser((String)auth.getPrincipal());
+        note.setUserId(user.getUserId());
         return noteMapper.editNote(note);
     }
 
