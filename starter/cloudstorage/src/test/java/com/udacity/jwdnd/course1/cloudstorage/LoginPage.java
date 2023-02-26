@@ -21,8 +21,10 @@ public class LoginPage {
     }
 
     public void login(String username, String password){
-        this.inputUsername.sendKeys(username);
-        this.inputPassword.sendKeys(password);
-        this.loginButton.click();
+        inputUsername.clear();
+        inputUsername.sendKeys(username);
+        inputPassword.clear();
+        inputPassword.sendKeys(password);
+        loginButton.click();
     }
 }

@@ -28,10 +28,14 @@ public class SignupPage {
     }
 
     public void signup(String firstName, String lastName, String username, String password) {
-        this.inputFirstName.sendKeys(firstName);
-        this.inputLastName.sendKeys(lastName);
-        this.inputUsername.sendKeys(username);
-        this.inputPassword.sendKeys(password);
+        inputFirstName.clear();
+        inputFirstName.sendKeys(firstName);
+        inputLastName.clear();
+        inputLastName.sendKeys(lastName);
+        inputUsername.clear();
+        inputUsername.sendKeys(username);
+        inputPassword.clear();
+        inputPassword.sendKeys(password);
         this.buttonSignUp.click();
     }
 }
