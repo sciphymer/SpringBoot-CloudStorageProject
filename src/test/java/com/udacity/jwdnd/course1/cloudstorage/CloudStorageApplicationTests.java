@@ -159,8 +159,8 @@ class CloudStorageApplicationTests {
 	public void testCredential() {
 		String firstName = "Ron";
 		String lastName = "Weasley";
-		String username = "ron";
-		String password = "wizardFamily";
+		String username = "ron1";
+		String password = "wizardFamily1";
 
 		String url = "moodle.com";
 		String url_username = "harrypotter";
