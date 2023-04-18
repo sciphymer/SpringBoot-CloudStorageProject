@@ -10,7 +10,7 @@ This Cloud Storage has the following features:
 2. **Note Management:** Add/update/remove text notes
 3. **Password Management:** Save, edit, and delete website credentials.  
 
-## The Project Starter Code
+### The Project Starter Code
 The project is built with the following starter code:
 * A database schema for the project and has added it to the `src/main/resources` directory. 
 * Some HTML templates are provided for the website mockups, and placed in the `src/main/resources/templates` folder. These are static pages only. Thymeleaf is used to add functionality and real data rendered from the server you develop.
