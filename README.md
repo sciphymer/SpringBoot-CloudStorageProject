@@ -10,12 +10,6 @@ This Cloud Storage has the following features:
 2. **Note Management:** Add/update/remove text notes
 3. **Password Management:** Save, edit, and delete website credentials.  
 
-### The Project Starter Code
-The project is built with the following starter code:
-* A database schema for the project and has added it to the `src/main/resources` directory. 
-* Some HTML templates are provided for the website mockups, and placed in the `src/main/resources/templates` folder. These are static pages only. Thymeleaf is used to add functionality and real data rendered from the server you develop.
-* EncryptionService in the backend for encrypting and decrypting passwords.
-
 Different features are implemented in different tiers of this web application:
 ### The Back-End
 1. Managing user access with Spring Security
@@ -70,3 +64,9 @@ Follow test cases are included:
 2. Tests for note creation, viewing, editing, and deletion.
 
 3. Tests for credential creation, viewing, editing, and deletion.
+
+### The Project Starter Code
+The project is built based on the following codings:
+* A database schema for the project and has added it to the `src/main/resources` directory. 
+* Some HTML templates are provided for the website mockups, and placed in the `src/main/resources/templates` folder. These are static pages only. Thymeleaf is used to add functionality and real data rendered from the server you develop.
+* EncryptionService in the backend for encrypting and decrypting passwords.
